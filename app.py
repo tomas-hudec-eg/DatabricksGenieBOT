@@ -1,3 +1,16 @@
+"""
+Databricks Genie Bot
+
+Author: Luiz Carrossoni Neto
+Revision: 1.0
+
+This script implements an experimental chatbot that interacts with Databricks' Genie API,
+which is currently in Private Preview. The bot facilitates conversations with Genie,
+Databricks' AI assistant, through a chat interface.
+
+Note: This is experimental code and is not intended for production use.
+"""
+
 import os
 import requests
 import time
