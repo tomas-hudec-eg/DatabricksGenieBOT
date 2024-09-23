@@ -130,8 +130,8 @@ class MyBot(ActivityHandler):
         response = f"## Question\n\n{question}\n\n"
 
         if status:
-            content = status.get('content', 'N/A')
-            response += f"## Content\n\n{content}\n\n"
+            #content = status.get('content', 'N/A')
+            #response += f"## Content\n\n{content}\n\n"
     
             if 'attachments' in status and status['attachments']:
                 attachment = status['attachments'][0]
@@ -166,7 +166,9 @@ class MyBot(ActivityHandler):
                 for row in data:
                     formatted_row = []
                     for value, col_schema in zip(row['values'], schema):
-                        if col_schema['type_name'] in ['DECIMAL', 'DOUBLE', 'FLOAT']:
+                        if value is None or value.get('str') is None:
+                            formatted_value = "NULL"
+                        elif col_schema['type_name'] in ['DECIMAL', 'DOUBLE', 'FLOAT']:
                             formatted_value = f"{float(value['str']):,.2f}"
                         elif col_schema['type_name'] in ['INT', 'BIGINT']:
                             formatted_value = f"{int(value['str']):,}"
