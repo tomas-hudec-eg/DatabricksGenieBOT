@@ -60,14 +60,12 @@ def genie_conversation(space_id, host, token, question, conversation_id=None):
                 print("Error: Unexpected response format:", status)
                 return None, None
             if status['status'] == 'COMPLETED':
-                # Check if there's a clarification question in the attachments
                 if 'attachments' in status and status['attachments']:
                     attachment = status['attachments'][0]
                     if 'text' in attachment:
                         # Return the clarification question instead of query results
                         return status, {'clarification': attachment['text']['content']}
 
-                # If no clarification, proceed with getting query results
                 query_results = get_query_results(conversation_id, message_id)
                 return status, query_results
             elif status['status'] == 'EXECUTING_QUERY':
@@ -78,7 +76,6 @@ def genie_conversation(space_id, host, token, question, conversation_id=None):
             time.sleep(5)
 
     if conversation_id is None:
-        # Start a new conversation
         conversation = start_conversation(question)
         if 'conversation_id' not in conversation or 'message_id' not in conversation:
             print("Error: Unable to start conversation. API response:", conversation)
@@ -86,7 +83,6 @@ def genie_conversation(space_id, host, token, question, conversation_id=None):
         conversation_id = conversation['conversation_id']
         message_id = conversation['message_id']
     else:
-        # Create a follow-up message in the existing conversation
         follow_up = create_follow_up_message(conversation_id, question)
         if 'id' not in follow_up:
             print("Error: Unexpected response format for follow-up message. API response:", follow_up)
@@ -109,7 +105,6 @@ class MyBot(ActivityHandler):
         question = turn_context.activity.text
         user_id = turn_context.activity.from_property.id
 
-        # Check if there's an existing conversation for this user
         conversation_id = self.conversation_ids.get(user_id)
 
         conversation_id, status, query_results = genie_conversation(
@@ -124,7 +119,6 @@ class MyBot(ActivityHandler):
             await turn_context.send_activity("Error: Unable to start or continue the conversation.")
             return
 
-        # Store the new conversation_id for this user
         self.conversation_ids[user_id] = conversation_id
 
         response = f"## Question\n\n{question}\n\n"
@@ -139,15 +133,12 @@ class MyBot(ActivityHandler):
                     description = attachment['query'].get('description', 'N/A')
                     response += f"## Description\n\n{description}\n\n"
                 elif 'text' in attachment:
-                    # This is where we handle the clarification
                     text_content = attachment['text'].get('content', '')
                     response += f"## Clarification\n\n{text_content}\n\n"
                     
-                    # Return the response immediately if there's a clarification
                     await turn_context.send_activity(response)
                     return  # Exit the function here
     
-        # Only process query results if there was no clarification
         if query_results and 'statement_response' in query_results:
             result = query_results['statement_response']
             if 'result' in result and 'data_typed_array' in result['result']:
@@ -156,13 +147,11 @@ class MyBot(ActivityHandler):
                 
                 response += "## Query Results\n\n"
                 
-                # Create table header
                 header = "| " + " | ".join(col['name'] for col in schema) + " |"
                 separator = "|" + "|".join(["---" for _ in schema]) + "|"
                 
                 response += header + "\n" + separator + "\n"
                 
-                # Add data rows
                 for row in data:
                     formatted_row = []
                     for value, col_schema in zip(row['values'], schema):
