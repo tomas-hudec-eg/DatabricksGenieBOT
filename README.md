@@ -37,6 +37,7 @@ The code was tested in Azure Bot Framework that facilitates to integrate with an
 
 ## Setup and Usage
 
+0. Python version 3.12.4
 1. Install the required dependencies listed in `requirements.txt`
 2. Set up the necessary environment variables (DATABRICKS_SPACE_ID, DATABRICKS_HOST, DATABRICKS_TOKEN, etc.) in the env.example file, change the name to .env
 3. Run the `app.py` script to start the bot
