@@ -19,6 +19,8 @@ from aiohttp import web
 from botbuilder.core import BotFrameworkAdapterSettings, BotFrameworkAdapter, ActivityHandler, TurnContext
 from botbuilder.schema import Activity, ChannelAccount
 
+
+
 load_dotenv()
 
 DATABRICKS_SPACE_ID = os.getenv("DATABRICKS_SPACE_ID")
@@ -27,6 +29,7 @@ DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")
 
 APP_ID = os.getenv("MicrosoftAppId", "")
 APP_PASSWORD = os.getenv("MicrosoftAppPassword", "")
+
 
 def genie_conversation(space_id, host, token, question, conversation_id=None):
     headers = {'Authorization': f'Bearer {token}'}
@@ -179,7 +182,7 @@ BOT = MyBot()
 
 async def messages(req: web.Request) -> web.Response:
     if "application/json" in req.headers["Content-Type"]:
-        body = await req.json()
+        body = await req.json()      
     else:
         return web.Response(status=415)
 
@@ -191,11 +194,13 @@ async def messages(req: web.Request) -> web.Response:
         return web.json_response(data=response.body, status=response.status)
     return web.Response(status=201)
 
-APP = web.Application()
-APP.router.add_post("/api/messages", messages)
+app = web.Application()
+app.router.add_post("/api/messages", messages)
 
 if __name__ == "__main__":
     try:
-        web.run_app(APP, host="localhost", port=3978)
+        host = os.getenv("HOST", "localhost")
+        port = int(os.environ.get("PORT", 3978))
+        web.run_app(app, host=host, port=port)
     except Exception as error:
         raise error
