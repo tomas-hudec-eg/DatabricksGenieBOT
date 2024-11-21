@@ -44,3 +44,36 @@ The code was tested in Azure Bot Framework that facilitates to integrate with an
 4. Call the bot endpoint via Azure Bot Framework or deploy it on a web application to handle the calls.
 
 Please refer to the code comments for more detailed information on each component's functionality.
+
+## Integrating with MS Teams
+
+sequenceDiagram
+    participant User
+    participant Azure Portal
+    participant GitHub
+    participant Azure CLI
+    participant VSCode
+    participant Web App
+    participant Bot Service
+    participant Databricks
+    participant Teams
+
+    User->>GitHub: Clone DatabricksGenieBOT repository
+    User->>Azure Portal: Create App Service Plan (Linux)
+    User->>Azure Portal: Create Web App (Python 3.12)
+    User->>Azure Portal: Create Azure Bot AI Service
+    User->>Azure Portal: Configure Bot (Secret, Icon, Description)
+    User->>Azure Portal: Configure Bot Messaging Endpoint
+    User->>Azure Portal: Configure Bot Channel (Teams)
+    User->>Databricks: Get Model Serving Endpoint URL
+    User->>Databricks: Generate Token
+    User->>Azure Portal: Configure Web App (Startup Command, Environment Variables)
+    User->>VSCode: Open project folder
+    User->>Azure CLI: Install Azure CLI
+    User->>VSCode: Create and activate virtual environment
+    User->>VSCode: Install requirements
+    User->>Azure CLI: Login (az login)
+    User->>Azure CLI: Deploy Web App (az webapp up)
+    User->>Azure Portal: Configure Web App settings
+    User->>Azure Portal: Test Bot in Web Chat
+    User->>Teams: Test Bot in Microsoft Teams
