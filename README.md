@@ -47,6 +47,7 @@ Please refer to the code comments for more detailed information on each componen
 
 ## Integrating with MS Teams
 
+```mermaid
 sequenceDiagram
     participant User
     participant Azure Portal
