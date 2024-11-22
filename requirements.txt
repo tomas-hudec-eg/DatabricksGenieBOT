@@ -11,3 +11,4 @@ botframework-connector
 botbuilder-schema
 botbuilder-dialogs
 botbuilder-integration-aiohttp
+databricks-sdk
