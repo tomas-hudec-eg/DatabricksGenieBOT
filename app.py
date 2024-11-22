@@ -9,7 +9,6 @@ from botbuilder.schema import Activity, ChannelAccount
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.dashboards import GenieAPI
 import asyncio
-from functools import lru_cache
 
 # Log
 logging.basicConfig(level=logging.INFO)
@@ -109,7 +108,8 @@ def process_query_results(answer_json: Dict) -> str:
     
     return response
 
-SETTINGS = BotFrameworkAdapterSettings(APP_ID, APP_PASSWORD)
+SETTINGS = BotFrameworkAdapterSettings(APP_ID, APP_PASSWORD
+                                       )
 ADAPTER = BotFrameworkAdapter(SETTINGS)
 
 class MyBot(ActivityHandler):
@@ -160,11 +160,13 @@ async def messages(req: web.Request) -> web.Response:
         logger.error(f"Error processing request: {str(e)}")
         return web.Response(status=500)
 
-APP = web.Application()
-APP.router.add_post("/api/messages", messages)
+app = web.Application()
+app.router.add_post("/api/messages", messages)
 
 if __name__ == "__main__":
     try:
-        web.run_app(APP, host="localhost", port=3978)
+        host = os.getenv("HOST", "localhost")
+        port = int(os.environ.get("PORT", 3978))
+        web.run_app(app, host=host, port=port)
     except Exception as error:
         logger.exception("Error running app")
