@@ -66,7 +66,7 @@ sequenceDiagram
     User->>Azure Portal: Configure Bot (Secret, Icon, Description)
     User->>Azure Portal: Configure Bot Messaging Endpoint
     User->>Azure Portal: Configure Bot Channel (Teams)
-    User->>Databricks: Get Model Serving Endpoint URL
+    User->>Databricks: Curate Genie Space and get Space ID
     User->>Databricks: Generate Token
     User->>Azure Portal: Configure Web App (Startup Command, Environment Variables)
     User->>VSCode: Open project folder
